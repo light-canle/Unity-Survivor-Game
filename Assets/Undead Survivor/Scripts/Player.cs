@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -46,6 +47,26 @@ public class Player : MonoBehaviour
         if (inputVec.x != 0)
         {
             sprite.flipX = (inputVec.x < 0);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D col)
+    {
+        if (!GameManager.instance.isLive)
+            return;
+        GameManager.instance.health -= Time.deltaTime * 10;
+
+        if (GameManager.instance.health <= 0)
+        {
+            // area, shadow는 남겨야 하므로 2부터 시작(스포너와 양쪽 손 비활성화
+            for (int index = 2; index < transform.childCount; index++)
+            {
+                transform.GetChild(index).gameObject.SetActive(false);
+            }
+            
+            // 애니메이션 작동
+            animator.SetTrigger("Dead");
+            GameManager.instance.GameOver();
         }
     }
 }
