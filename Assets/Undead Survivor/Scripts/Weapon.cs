@@ -61,8 +61,8 @@ public class Weapon : MonoBehaviour
 
         // 프로퍼티 세팅
         id = data.itemId;
-        damage = data.baseDamage;
-        count = data.baseCount;
+        damage = data.baseDamage * Character.Damage;
+        count = data.baseCount + Character.Count;
 
         for (int index = 0; index < GameManager.instance.pool.prefabs.Length; index++)
         {
@@ -76,11 +76,11 @@ public class Weapon : MonoBehaviour
         switch (id)
         {
             case 0:
-                speed = 150; // 회전 속도
+                speed = 150 * Character.WeaponSpeed; // 회전 속도
                 Batch();
                 break;
             default:
-                speed = 0.3f; // 발사 간격
+                speed = 0.3f * Character.WeaponRate; // 발사 간격
                 break;
         }
         
@@ -95,7 +95,7 @@ public class Weapon : MonoBehaviour
 
     public void LevelUp(float damage, int count)
     {
-        this.damage = damage;
+        this.damage = damage * Character.Damage;
         this.count += count;
 
         // 근접 무기용 추가 배치 함수

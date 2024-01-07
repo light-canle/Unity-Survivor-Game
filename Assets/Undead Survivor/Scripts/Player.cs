@@ -9,12 +9,14 @@ public class Player : MonoBehaviour
 {
     public Vector2 inputVec;
     public float speed = 3.0f;
+    public Scanner scanner;
+    public RuntimeAnimatorController[] animCon;
+    public Hand[] hands;
+    
     private Rigidbody2D rigidbody2D;
     private Animator animator;
     private SpriteRenderer sprite;
-    public Scanner scanner;
-
-    public Hand[] hands;
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,6 +25,12 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         scanner = GetComponent<Scanner>();
         hands = GetComponentsInChildren<Hand>(true);
+    }
+
+    private void OnEnable()
+    {
+        speed *= Character.Speed;
+        animator.runtimeAnimatorController = animCon[GameManager.instance.playerId];
     }
 
     void OnMove(InputValue value)
