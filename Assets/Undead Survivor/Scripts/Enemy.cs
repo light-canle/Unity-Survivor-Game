@@ -93,6 +93,7 @@ public class Enemy : MonoBehaviour
         {
             // 피격 표현
             anim.SetTrigger("Hit");
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit);
         }
         else
         {
@@ -104,8 +105,13 @@ public class Enemy : MonoBehaviour
             // dead 애니메이션, 비활성화
             anim.SetBool("Dead", true);
             // 경험치 부여
-            GameManager.instance.kill++;
             GameManager.instance.GetExp();
+
+            if (GameManager.instance.isLive)
+            {
+                GameManager.instance.kill++;
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead);
+            }
         }
     }
 
