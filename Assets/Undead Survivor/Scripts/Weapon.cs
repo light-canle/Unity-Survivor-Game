@@ -129,7 +129,7 @@ public class Weapon : MonoBehaviour
             bullet.Rotate(rotVec);
             bullet.Translate(bullet.up * 1.5f, Space.World);
             
-            bullet.GetComponent<Bullet>().Init(damage, -1, Vector3.zero); // 근접 무기의 관통력은 무한하다(-1)
+            bullet.GetComponent<Bullet>().Init(damage, -100, Vector3.zero); // 근접 무기의 관통력은 무한하다(-100)
         }
     }
 

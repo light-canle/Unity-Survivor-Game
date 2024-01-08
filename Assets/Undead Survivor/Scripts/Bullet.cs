@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
         this.per = per;
 
         // 원거리 무기용 속도
-        if (per > -1)
+        if (per >= 0)
         {
             rigid.velocity = dir * 10f;
         }
@@ -29,14 +29,26 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (!col.CompareTag("Enemy") || per == -1)
+        if (!col.CompareTag("Enemy") || per == -100)
             return;
 
         per--;
-        if (per == -1)
+        if (per < 0)
         {
             rigid.velocity = Vector2.zero;
             gameObject.SetActive(false);
         }
+    }
+
+    // 화면 밖으로 나간 총알 삭제
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("Area") || per == -100)
+        {
+            return;
+        }
+        
+        rigid.velocity = Vector2.zero;
+        gameObject.SetActive(false);
     }
 }

@@ -23,16 +23,19 @@ public class Reposition : MonoBehaviour
 
         Vector3 playerPos = GameManager.instance.player.transform.position;
         Vector3 myPos = transform.position;
-        float diffX = Mathf.Abs(playerPos.x - myPos.x);
-        float diffY = Mathf.Abs(playerPos.y - myPos.y);
-
-        Vector3 playerDir = GameManager.instance.player.inputVec;
-        float dirX = playerDir.x < 0 ? -1.0f : 1.0f;
-        float dirY = playerDir.y < 0 ? -1.0f : 1.0f;
 
         switch (transform.tag)
         {
             case "Ground":
+                float diffX = playerPos.x - myPos.x;
+                float diffY = playerPos.y - myPos.y;
+        
+                float dirX = diffX < 0 ? -1.0f : 1.0f;
+                float dirY = diffY < 0 ? -1.0f : 1.0f;
+
+                diffX = Mathf.Abs(diffX);
+                diffY = Mathf.Abs(diffY);
+                
                 if (diffX > diffY)
                 {
                     transform.Translate(Vector3.right * dirX * 40.0f);
@@ -45,7 +48,9 @@ public class Reposition : MonoBehaviour
             case "Enemy":
                 if (collider.enabled)
                 {
-                    transform.Translate(playerDir * 20 + new Vector3(Random.Range(-3.0f, 3.0f), Random.Range(-3.0f, 3.0f), 0));
+                    Vector3 dist = playerPos - myPos;
+                    Vector3 rand = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
+                    transform.Translate(2 * dist + rand);
                 }
                 break;
         }
