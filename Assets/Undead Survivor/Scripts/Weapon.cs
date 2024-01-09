@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Weapon : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class Weapon : MonoBehaviour
 
     private float timer; // 원거리 무기 발사 간격
     private Player player;
+    private ItemData itemData;
 
     private void Awake()
     {
@@ -63,6 +66,7 @@ public class Weapon : MonoBehaviour
         id = data.itemId;
         damage = data.baseDamage * Character.Damage;
         count = data.baseCount + Character.Count;
+        itemData = data;
 
         for (int index = 0; index < GameManager.instance.pool.prefabs.Length; index++)
         {
@@ -149,8 +153,19 @@ public class Weapon : MonoBehaviour
         Transform bullet = GameManager.instance.pool.Get(prefabId).transform;
         bullet.position = transform.position;
         bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
+
+        // 2.5% 확률로 대형 총알 발사
+        if (Random.Range(0, 40) == 0)
+        {
+            bullet.localScale = new Vector3(4.0f, 4.0f, 4.0f);
+            bullet.GetComponent<Bullet>().Init(damage * 3, count * 3, dir);
+        }
+        else
+        {
+            bullet.localScale = Vector3.one;
+            bullet.GetComponent<Bullet>().Init(damage, count, dir);
+        }
         
-        bullet.GetComponent<Bullet>().Init(damage, count, dir);
         AudioManager.instance.PlaySfx(AudioManager.Sfx.Range);
     }
 }
