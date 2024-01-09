@@ -27,12 +27,14 @@ public class GameManager : MonoBehaviour
     public Player player;
     public LevelUp uiLevelUp;
     public Result uiResult;
+    public Transform uiJoy;
     public GameObject enemyCleaner;
 
     void Awake()
     {
         instance = this;
-        // if 
+        // 60 프레임으로 설정
+        Application.targetFrameRate = 60;
     }
 
     public void GameStart(int id)
@@ -91,6 +93,11 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+    
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
 
     private void Update()
     {
@@ -128,6 +135,8 @@ public class GameManager : MonoBehaviour
         isLive = false;
         // 시간 속도 조절
         Time.timeScale = 0;
+        // joy ui 숨김
+        uiJoy.localScale = Vector3.zero;
     }
 
     public void Resume()
@@ -135,5 +144,7 @@ public class GameManager : MonoBehaviour
         isLive = true;
         // 시간 속도 조절
         Time.timeScale = 1f;
+        // joy ui 보임
+        uiJoy.localScale = Vector3.one;
     }
 }
